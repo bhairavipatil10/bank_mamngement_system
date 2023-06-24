@@ -1,0 +1,85 @@
+class Event:
+    def __init__(self, name, date, start_time, end_time):
+        self.name = name
+        self.date = date
+        self.start_time = start_time
+        self.end_time = end_time
+
+
+class Room:
+    def __init__(self, room_number, capacity):
+        self.room_number = room_number
+        self.capacity = capacity
+        self.booked_events = []
+
+    def book_event(self, event):
+        for booked_event in self.booked_events:
+            if (event.date == booked_event.date) and (
+                (event.start_time >= booked_event.start_time and event.start_time < booked_event.end_time)
+                or (event.end_time > booked_event.start_time and event.end_time <= booked_event.end_time)
+            ):
+                print("Conflict: The room is already booked for an event during this time.")
+                return
+        self.booked_events.append(event)
+        print("Event booked successfully.")
+
+    def display_booked_events(self):
+        if not self.booked_events:
+            print("No events booked for this room.")
+            return
+        print("Booked events for Room", self.room_number)
+        for event in self.booked_events:
+            print("Event:", event.name)
+            print("Date:", event.date)
+            print("Start Time:", event.start_time)
+            print("End Time:", event.end_time)
+            print("-----------------------")
+
+
+class Hotel:
+    def __init__(self, name):
+        self.name = name
+        self.rooms = []
+
+    def add_room(self, room):
+        self.rooms.append(room)
+
+    def find_room(self, room_number):
+        for room in self.rooms:
+            if room.room_number == room_number:
+                return room
+        return None
+
+
+# Create hotel and rooms
+hotel = Hotel("Grand Hotel")
+room1 = Room(101, 50)
+room2 = Room(102, 30)
+hotel.add_room(room1)
+hotel.add_room(room2)
+
+# Create events
+event1 = Event("Conference", "2023-06-25", "10:00", "12:00")
+event2 = Event("Meeting", "2023-06-26", "14:00", "16:00")
+
+# Book events
+room1.book_event(event1)
+room1.book_event(event2)
+
+# Display booked events for room1
+room1.display_booked_events()
+
+ output:- C:\Users\patil\PycharmProjects\bankmangement\venv\Scripts\python.exe C:\Users\patil\PycharmProjects\bankmangement\pr.py 
+Event booked successfully.
+Event booked successfully.
+Booked events for Room 101
+Event: Conference
+Date: 2023-06-25
+Start Time: 10:00
+End Time: 12:00
+-----------------------
+Event: Meeting
+Date: 2023-06-26
+Start Time: 14:00
+End Time: 16:00
+-----------------------
